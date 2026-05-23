@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# scraper artifacts that aren't useful in the repo
+scraper/scrape.log
+docs/data/_debug_paths.json
+
+# don't commit cookies if anyone accidentally checks them in
+.env
+*.cookies

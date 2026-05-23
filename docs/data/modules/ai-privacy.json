@@ -1,0 +1,9 @@
+{
+  "id": 335,
+  "title": "AI Privacy",
+  "slug": "ai-privacy",
+  "url": "https://academy.hackthebox.com/app/module/335",
+  "locked": true,
+  "chapters": [],
+  "note": "Content locked. Unlock module on HTB Academy and re-run scraper/scrape.py --module 335"
+}

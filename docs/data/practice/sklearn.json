@@ -1,0 +1,39 @@
+{
+  "title": "Level 4 — scikit-learn",
+  "slug": "sklearn",
+  "intro": "## The classic ML toolkit\n\nFit/predict, train/test split, metrics. `scikit-learn` is what COAE uses for the supervised-learning chapters. First run installs `scikit-learn` (~15MB) on top of numpy.",
+  "exercises": [
+    {
+      "id": "4.1-train-test-split",
+      "title": "4.1 train_test_split",
+      "prompt": "Split a synthetic dataset into 80/20 train/test using `random_state=42`. Print the sizes.",
+      "starter": "import numpy as np\nfrom sklearn.model_selection import train_test_split\n\nrng = np.random.default_rng(0)\nX = rng.normal(size=(200, 5))\ny = (X[:, 0] + X[:, 1] > 0).astype(int)\n# TODO\n",
+      "solution": "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\nprint(X_train.shape, X_test.shape, y_train.shape, y_test.shape)\n",
+      "hint": "train_test_split returns 4 arrays in fixed order."
+    },
+    {
+      "id": "4.2-logreg",
+      "title": "4.2 Fit + predict + accuracy",
+      "prompt": "Train a `LogisticRegression` on the training set, predict on the test set, print `accuracy_score`.",
+      "starter": "import numpy as np\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import accuracy_score\nfrom sklearn.model_selection import train_test_split\n\nrng = np.random.default_rng(0)\nX = rng.normal(size=(200, 5))\ny = (X[:, 0] + X[:, 1] > 0).astype(int)\nX_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)\n# TODO\n",
+      "solution": "clf = LogisticRegression().fit(X_tr, y_tr)\npreds = clf.predict(X_te)\nprint(\"accuracy:\", accuracy_score(y_te, preds))\n",
+      "hint": ".fit(X, y).predict(X) is the classic sklearn flow."
+    },
+    {
+      "id": "4.3-scaler-pipeline",
+      "title": "4.3 StandardScaler + Pipeline",
+      "prompt": "Wrap a scaler + LogisticRegression in a `Pipeline` so the scaler fits only on train data. Print test accuracy.",
+      "starter": "import numpy as np\nfrom sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.model_selection import train_test_split\n\nrng = np.random.default_rng(0)\nX = rng.normal(size=(200, 5))\ny = (X[:, 0] + X[:, 1] > 0).astype(int)\nX_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)\n# TODO: pipeline with StandardScaler -> LogisticRegression\n",
+      "solution": "pipe = Pipeline([\n    (\"scaler\", StandardScaler()),\n    (\"clf\", LogisticRegression()),\n])\npipe.fit(X_tr, y_tr)\nprint(\"accuracy:\", pipe.score(X_te, y_te))\n",
+      "hint": "Pipeline([(name, estimator), ...]). .score is shorthand for predict + metric."
+    },
+    {
+      "id": "4.4-metrics",
+      "title": "4.4 Precision / recall / F1",
+      "prompt": "On an imbalanced security dataset, accuracy lies. Print precision, recall, and F1 of a trained classifier.",
+      "starter": "import numpy as np\nfrom sklearn.linear_model import LogisticRegression\nfrom sklearn.metrics import precision_score, recall_score, f1_score\nfrom sklearn.model_selection import train_test_split\n\nrng = np.random.default_rng(7)\nX = rng.normal(size=(500, 4))\n# imbalanced: only 10% positives\ny = (X[:, 0] > 1.5).astype(int)\nprint(\"positives:\", y.sum(), \"/\", len(y))\nX_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.3, random_state=0)\nclf = LogisticRegression().fit(X_tr, y_tr)\npreds = clf.predict(X_te)\n# TODO\n",
+      "solution": "print(\"precision:\", precision_score(y_te, preds))\nprint(\"recall:   \", recall_score(y_te, preds))\nprint(\"f1:       \", f1_score(y_te, preds))\n",
+      "hint": "All three take (y_true, y_pred)."
+    }
+  ]
+}

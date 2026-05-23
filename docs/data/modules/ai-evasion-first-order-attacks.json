@@ -1,0 +1,9 @@
+{
+  "id": 319,
+  "title": "AI Evasion - First-Order Attacks",
+  "slug": "ai-evasion-first-order-attacks",
+  "url": "https://academy.hackthebox.com/app/module/319",
+  "locked": true,
+  "chapters": [],
+  "note": "Content locked. Unlock module on HTB Academy and re-run scraper/scrape.py --module 319"
+}

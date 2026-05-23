@@ -1,0 +1,87 @@
+{
+  "title": "Level 1 — Python Basics",
+  "slug": "basics",
+  "intro": "## What you'll use everywhere\n\nVariables, lists, dicts, loops, conditionals, comprehensions, lambdas, string methods, files. Every ML script chains these.\n\nEdit any cell and hit **Run**. The first run downloads Python (~10MB, one-time, cached for offline).",
+  "exercises": [
+    {
+      "id": "1.1-variables",
+      "title": "1.1 Variables and f-strings",
+      "prompt": "Create a variable `model_name` set to `\"RandomForest\"` and `n_classes` set to `25`. Print both using a single f-string.",
+      "starter": "# Python figures out types automatically\nname = \"malware_sample\"\ncount = 42\naccuracy = 0.95\nprint(f\"Name: {name}, Count: {count}, Accuracy: {accuracy}\")\n\n# TODO: model_name = ?\n#       n_classes  = ?\n#       print f-string with both\n",
+      "solution": "model_name = \"RandomForest\"\nn_classes = 25\nprint(f\"model_name = {model_name}, n_classes = {n_classes}\")\n",
+      "hint": "f\"hello {var1} and {var2}\""
+    },
+    {
+      "id": "1.2-lists",
+      "title": "1.2 Lists — index and slice",
+      "prompt": "Create `scores = [0.85, 0.90, 0.78, 0.95, 0.88]`. Print the first, the last, and the middle three (indices 1–3 inclusive).",
+      "starter": "attacks = [\"dos\", \"probe\", \"privilege\", \"access\"]\nprint(attacks[0])     # first\nprint(attacks[-1])    # last\nprint(attacks[1:3])   # slice\n\n# TODO\nscores = ...\n",
+      "solution": "scores = [0.85, 0.90, 0.78, 0.95, 0.88]\nprint(scores[0], scores[-1], scores[1:4])\n",
+      "hint": "Slicing is end-exclusive: a[1:4] gives indices 1,2,3."
+    },
+    {
+      "id": "1.3-loops",
+      "title": "1.3 For loops with enumerate",
+      "prompt": "Loop through `scores` and print `\"Score i: x\"` for each, where i is the index and x is the value.",
+      "starter": "scores = [0.85, 0.90, 0.78, 0.95, 0.88]\n\n# TODO: use enumerate\n",
+      "solution": "scores = [0.85, 0.90, 0.78, 0.95, 0.88]\nfor i, s in enumerate(scores):\n    print(f\"Score {i}: {s}\")\n",
+      "hint": "for i, x in enumerate(iterable):"
+    },
+    {
+      "id": "1.4-conditionals",
+      "title": "1.4 if / elif / else",
+      "prompt": "Given a variable `label`, print `\"Blocked\"` if it's `\"spam\"`, `\"Allowed\"` if `\"normal\"`, otherwise `\"Unknown\"`. Test with several values.",
+      "starter": "label = \"spam\"\n\n# TODO\n",
+      "solution": "for label in (\"spam\", \"normal\", \"phish\"):\n    if label == \"spam\":  print(\"Blocked\")\n    elif label == \"normal\": print(\"Allowed\")\n    else:                  print(\"Unknown\")\n",
+      "hint": "Use ==, not = for comparison."
+    },
+    {
+      "id": "1.5-dicts",
+      "title": "1.5 Dictionaries",
+      "prompt": "Create `dataset_info = {\"name\": \"NSL-KDD\", \"samples\": 125973, \"features\": 41}`. Loop through it printing `key -> value` for each entry.",
+      "starter": "model = {\"name\": \"LogReg\", \"accuracy\": 0.93}\nfor k, v in model.items():\n    print(f\"{k} = {v}\")\n\n# TODO\n",
+      "solution": "dataset_info = {\"name\": \"NSL-KDD\", \"samples\": 125973, \"features\": 41}\nfor k, v in dataset_info.items():\n    print(f\"{k} -> {v}\")\n",
+      "hint": ".items() yields (key, value) tuples."
+    },
+    {
+      "id": "1.6-functions",
+      "title": "1.6 Functions",
+      "prompt": "Write `is_malicious(label)` that returns `True` if label is not `\"normal\"`. Call it with both `\"dos\"` and `\"normal\"` and print the results.",
+      "starter": "def compute_accuracy(correct, total):\n    return round(100 * correct / total, 2)\n\nprint(compute_accuracy(95, 100))\n\n# TODO\ndef is_malicious(label):\n    ...\n",
+      "solution": "def is_malicious(label):\n    return label != \"normal\"\n\nprint(is_malicious(\"dos\"))\nprint(is_malicious(\"normal\"))\n",
+      "hint": "`return` the boolean expression directly."
+    },
+    {
+      "id": "1.7-comprehensions",
+      "title": "1.7 List comprehensions",
+      "prompt": "Given `labels = [\"spam\", \"normal\", \"spam\", \"normal\", \"spam\", \"normal\"]`, use a comprehension to build `binary_labels` where spam=1, normal=0. Expected: `[1,0,1,0,1,0]`.",
+      "starter": "nums = [1, 2, 3, 4, 5]\ndoubled = [n * 2 for n in nums]\nprint(doubled)\n\nlabels = [\"spam\", \"normal\", \"spam\", \"normal\", \"spam\", \"normal\"]\n# TODO\n",
+      "solution": "labels = [\"spam\", \"normal\", \"spam\", \"normal\", \"spam\", \"normal\"]\nbinary = [1 if x == \"spam\" else 0 for x in labels]\nprint(binary)\n",
+      "hint": "[expr_if_true if condition else expr_if_false for x in seq]"
+    },
+    {
+      "id": "1.8-lambda-map",
+      "title": "1.8 lambda + map",
+      "prompt": "Lowercase every string in `raw = [\"SPAM\", \"Normal\", \"SPAM\", \"HAM\"]` using `map()` and a lambda.",
+      "starter": "raw = [\"SPAM\", \"Normal\", \"SPAM\", \"HAM\"]\n# TODO\n",
+      "solution": "raw = [\"SPAM\", \"Normal\", \"SPAM\", \"HAM\"]\nlowered = list(map(lambda x: x.lower(), raw))\nprint(lowered)\n",
+      "hint": "list(map(lambda x: ..., raw))"
+    },
+    {
+      "id": "1.9-string-methods",
+      "title": "1.9 String preprocessing chain",
+      "prompt": "Given `msg = \"  Congratulations! You Won A FREE iPad!  \"`, chain methods to: strip, lowercase, split, join with `\" \"`. Print the result.",
+      "starter": "text = \"  FREE Entry To Win A Prize!  \"\nprint(text.strip().lower())\n\nmsg = \"  Congratulations! You Won A FREE iPad!  \"\n# TODO\n",
+      "solution": "msg = \"  Congratulations! You Won A FREE iPad!  \"\nprint(\" \".join(msg.strip().lower().split()))\n",
+      "hint": "Calling .split() with no args splits on any whitespace."
+    },
+    {
+      "id": "1.10-json-files",
+      "title": "1.10 JSON files",
+      "prompt": "Build `model_params = {\"coef\": [0.5, 0.3], \"intercept\": 0.1}`, dump it to JSON via `json.dumps`, then `json.loads` it back. Print both. (Pyodide's filesystem is virtual — we use string dumps for portability.)",
+      "starter": "import json\n\nmodel_params = ...\n# TODO: dump to a string, load it back, print both\n",
+      "solution": "import json\nmodel_params = {\"coef\": [0.5, 0.3], \"intercept\": 0.1}\nblob = json.dumps(model_params)\nloaded = json.loads(blob)\nprint(blob)\nprint(loaded)\n",
+      "hint": "json.dumps(obj) -> str; json.loads(str) -> obj."
+    }
+  ]
+}

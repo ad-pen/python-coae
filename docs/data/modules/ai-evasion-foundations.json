@@ -1,0 +1,9 @@
+{
+  "id": 318,
+  "title": "AI Evasion - Foundations",
+  "slug": "ai-evasion-foundations",
+  "url": "https://academy.hackthebox.com/app/module/318",
+  "locked": true,
+  "chapters": [],
+  "note": "Content locked. Unlock module on HTB Academy and re-run scraper/scrape.py --module 318"
+}

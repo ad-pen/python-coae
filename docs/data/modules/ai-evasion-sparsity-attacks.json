@@ -1,0 +1,9 @@
+{
+  "id": 320,
+  "title": "AI Evasion - Sparsity Attacks",
+  "slug": "ai-evasion-sparsity-attacks",
+  "url": "https://academy.hackthebox.com/app/module/320",
+  "locked": true,
+  "chapters": [],
+  "note": "Content locked. Unlock module on HTB Academy and re-run scraper/scrape.py --module 320"
+}

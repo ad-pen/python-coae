@@ -1,0 +1,47 @@
+{
+  "title": "Level 3 — pandas",
+  "slug": "pandas",
+  "intro": "## DataFrames for security data\n\nNetwork logs, malware samples, email datasets — pandas is how you load, filter, group, and join them. First run installs `pandas` (loads on demand).",
+  "exercises": [
+    {
+      "id": "3.1-build-df",
+      "title": "3.1 Build a DataFrame from a dict",
+      "prompt": "Make a DataFrame with columns `host`, `bytes_in`, `bytes_out`, `label` and 4 rows of made-up data. Print it and `.dtypes`.",
+      "starter": "import pandas as pd\n# TODO\n",
+      "solution": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"10.0.0.1\", \"10.0.0.2\", \"10.0.0.3\", \"10.0.0.4\"],\n    \"bytes_in\":  [1024, 8_000_000, 512, 250_000],\n    \"bytes_out\": [   0,    25_000,   0, 110_000],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\"],\n})\nprint(df)\nprint(df.dtypes)\n",
+      "hint": "pd.DataFrame({\"col\": [val, val, ...]})"
+    },
+    {
+      "id": "3.2-filter",
+      "title": "3.2 Filtering with boolean masks",
+      "prompt": "From the DataFrame above, select rows where `bytes_out > 10_000`. Then select rows where `label` is `exfil` OR `c2`.",
+      "starter": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"10.0.0.1\", \"10.0.0.2\", \"10.0.0.3\", \"10.0.0.4\"],\n    \"bytes_in\":  [1024, 8_000_000, 512, 250_000],\n    \"bytes_out\": [   0,    25_000,   0, 110_000],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\"],\n})\n# TODO\n",
+      "solution": "print(df[df.bytes_out > 10_000])\nprint(df[df.label.isin([\"exfil\", \"c2\"])])\n",
+      "hint": "df[mask] returns rows where mask is True. Use .isin() for OR over many values."
+    },
+    {
+      "id": "3.3-derived-col",
+      "title": "3.3 Add a derived column",
+      "prompt": "Add column `total = bytes_in + bytes_out`, then add `is_malicious = label != \"normal\"`. Print the DataFrame.",
+      "starter": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"10.0.0.1\", \"10.0.0.2\", \"10.0.0.3\", \"10.0.0.4\"],\n    \"bytes_in\":  [1024, 8_000_000, 512, 250_000],\n    \"bytes_out\": [   0,    25_000,   0, 110_000],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\"],\n})\n# TODO\n",
+      "solution": "df[\"total\"] = df.bytes_in + df.bytes_out\ndf[\"is_malicious\"] = df.label != \"normal\"\nprint(df)\n",
+      "hint": "df[\"new_col\"] = expression."
+    },
+    {
+      "id": "3.4-groupby",
+      "title": "3.4 groupby + agg",
+      "prompt": "Group by `label` and compute mean `bytes_in` and max `bytes_out` per group.",
+      "starter": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"h1\", \"h2\", \"h3\", \"h4\", \"h5\"],\n    \"bytes_in\":  [1024, 8e6, 512, 250e3, 800],\n    \"bytes_out\": [0, 25e3, 0, 110e3, 0],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\", \"normal\"],\n})\n# TODO\n",
+      "solution": "out = df.groupby(\"label\").agg(\n    mean_in=(\"bytes_in\", \"mean\"),\n    max_out=(\"bytes_out\", \"max\"),\n)\nprint(out)\n",
+      "hint": "df.groupby(col).agg(name=(col, func))"
+    },
+    {
+      "id": "3.5-class-balance",
+      "title": "3.5 Class balance check",
+      "prompt": "Before training any classifier, you check class balance. Print value counts (`label.value_counts()`) and the proportion of each class.",
+      "starter": "import pandas as pd\ndf = pd.DataFrame({\"label\": [\"normal\"]*80 + [\"malicious\"]*20})\n# TODO\n",
+      "solution": "print(df.label.value_counts())\nprint(df.label.value_counts(normalize=True))\n",
+      "hint": "value_counts(normalize=True) gives proportions."
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "path_id": 418,
+  "path_name": "AI Red Teamer",
+  "acronym": "COAE",
+  "modules": [
+    {
+      "id": 290,
+      "title": "Fundamentals of AI",
+      "slug": "fundamentals-of-ai",
+      "chapter_count": 7,
+      "locked": false
+    },
+    {
+      "id": 292,
+      "title": "Applications of AI in InfoSec",
+      "slug": "applications-of-ai-in-infosec",
+      "chapter_count": 5,
+      "locked": false
+    },
+    {
+      "id": 294,
+      "title": "Introduction to Red Teaming AI",
+      "slug": "introduction-to-red-teaming-ai",
+      "chapter_count": 4,
+      "locked": false
+    },
+    {
+      "id": 297,
+      "title": "Prompt Injection Attacks",
+      "slug": "prompt-injection-attacks",
+      "chapter_count": 6,
+      "locked": false
+    },
+    {
+      "id": 307,
+      "title": "LLM Output Attacks",
+      "slug": "llm-output-attacks",
+      "chapter_count": 4,
+      "locked": false
+    },
+    {
+      "id": 302,
+      "title": "AI Data Attacks",
+      "slug": "ai-data-attacks",
+      "chapter_count": 6,
+      "locked": false
+    },
+    {
+      "id": 315,
+      "title": "Attacking AI - Application and System",
+      "slug": "attacking-ai-application-and-system",
+      "chapter_count": 5,
+      "locked": false
+    },
+    {
+      "id": 318,
+      "title": "AI Evasion - Foundations",
+      "slug": "ai-evasion-foundations",
+      "chapter_count": 0,
+      "locked": true
+    },
+    {
+      "id": 319,
+      "title": "AI Evasion - First-Order Attacks",
+      "slug": "ai-evasion-first-order-attacks",
+      "chapter_count": 0,
+      "locked": true
+    },
+    {
+      "id": 320,
+      "title": "AI Evasion - Sparsity Attacks",
+      "slug": "ai-evasion-sparsity-attacks",
+      "chapter_count": 0,
+      "locked": true
+    },
+    {
+      "id": 335,
+      "title": "AI Privacy",
+      "slug": "ai-privacy",
+      "chapter_count": 0,
+      "locked": true
+    },
+    {
+      "id": 322,
+      "title": "AI Defense",
+      "slug": "ai-defense",
+      "chapter_count": 0,
+      "locked": true
+    }
+  ]
+}

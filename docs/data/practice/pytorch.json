@@ -1,0 +1,39 @@
+{
+  "title": "Level 5 — PyTorch",
+  "slug": "pytorch",
+  "intro": "## Tensors, autograd, training loops\n\nPyTorch is what COAE's deep-learning + adversarial-example modules use. Pyodide can install `torch` (CPU-only) — it's heavy, expect a 30–60s download first time.",
+  "exercises": [
+    {
+      "id": "5.1-tensors",
+      "title": "5.1 Tensors vs numpy",
+      "prompt": "Build a `torch.tensor` from a Python list, print its `.shape`, `.dtype`, and convert it back to numpy with `.numpy()`.",
+      "starter": "import torch\n# TODO\n",
+      "solution": "import torch\nx = torch.tensor([[1., 2., 3.], [4., 5., 6.]])\nprint(x.shape, x.dtype)\nprint(x.numpy())\n",
+      "hint": "tensor(...).numpy() bridges the gap (CPU tensors only)."
+    },
+    {
+      "id": "5.2-autograd",
+      "title": "5.2 Autograd 101",
+      "prompt": "Define x = tensor(3.0, requires_grad=True). Compute y = x**3 + 2*x. Call y.backward() and print x.grad. Verify it equals 3*x**2 + 2 = 29.",
+      "starter": "import torch\n# TODO\n",
+      "solution": "import torch\nx = torch.tensor(3.0, requires_grad=True)\ny = x**3 + 2*x\ny.backward()\nprint(x.grad.item())   # 29.0\n",
+      "hint": "requires_grad=True is the magic flag — autograd tracks ops on this tensor."
+    },
+    {
+      "id": "5.3-mini-nn",
+      "title": "5.3 A 2-layer model",
+      "prompt": "Build a tiny `nn.Sequential`: Linear(4, 8) → ReLU → Linear(8, 2). Pass a random (3, 4) input through it and print the output shape.",
+      "starter": "import torch, torch.nn as nn\n# TODO\n",
+      "solution": "import torch, torch.nn as nn\nmodel = nn.Sequential(\n    nn.Linear(4, 8),\n    nn.ReLU(),\n    nn.Linear(8, 2),\n)\nx = torch.randn(3, 4)\nprint(model(x).shape)   # torch.Size([3, 2])\n",
+      "hint": "nn.Sequential takes layers in order."
+    },
+    {
+      "id": "5.4-training-step",
+      "title": "5.4 One training step",
+      "prompt": "Manually do one training step on the model above: random batch (16, 4), random target (16,), CrossEntropyLoss, Adam. Print loss before and after `optimizer.step()`.",
+      "starter": "import torch, torch.nn as nn\nmodel = nn.Sequential(nn.Linear(4, 8), nn.ReLU(), nn.Linear(8, 2))\nopt = torch.optim.Adam(model.parameters(), lr=0.1)\nloss_fn = nn.CrossEntropyLoss()\n\nx = torch.randn(16, 4)\ny = torch.randint(0, 2, (16,))\n# TODO: forward, loss, zero_grad, backward, step\n",
+      "solution": "loss_before = loss_fn(model(x), y).item()\nopt.zero_grad()\nloss = loss_fn(model(x), y)\nloss.backward()\nopt.step()\nloss_after = loss_fn(model(x), y).item()\nprint(\"before:\", loss_before, \"after:\", loss_after)\n",
+      "hint": "Order: zero_grad -> forward -> loss -> backward -> step."
+    }
+  ]
+}

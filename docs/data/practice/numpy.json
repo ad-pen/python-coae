@@ -1,0 +1,71 @@
+{
+  "title": "Level 2 — NumPy for ML",
+  "slug": "numpy",
+  "intro": "## NumPy is the foundation\n\nEvery ML library either uses NumPy arrays directly or mimics them (PyTorch tensors, JAX arrays). Shape, indexing, masking, broadcasting — master these and you'll read 80% of ML code fluently.\n\nFirst Run will install `numpy` automatically.",
+  "exercises": [
+    {
+      "id": "2.1-array",
+      "title": "2.1 Create arrays",
+      "prompt": "Create `scores = np.array([0.85, 0.90, 0.78, 0.95, 0.88])`. Print it, its `.shape`, and `type(scores)`.",
+      "starter": "import numpy as np\n\na = np.array([1, 2, 3, 4, 5])\nprint(a, a.shape, type(a))\n\n# TODO\n",
+      "solution": "import numpy as np\nscores = np.array([0.85, 0.90, 0.78, 0.95, 0.88])\nprint(scores, scores.shape, type(scores))\n",
+      "hint": "Pass a list to np.array()."
+    },
+    {
+      "id": "2.2-elementwise",
+      "title": "2.2 Element-wise math + accuracy",
+      "prompt": "Given two arrays of predictions and ground-truth, compute the accuracy in one line using `np.mean(...)`.",
+      "starter": "import numpy as np\n\npredictions = np.array([1, 0, 1, 1, 0, 1, 0, 0])\nactual      = np.array([1, 0, 0, 1, 0, 1, 1, 0])\n# TODO: one-line accuracy\n",
+      "solution": "import numpy as np\npredictions = np.array([1, 0, 1, 1, 0, 1, 0, 0])\nactual      = np.array([1, 0, 0, 1, 0, 1, 1, 0])\nprint(np.mean(predictions == actual))\n",
+      "hint": "(pred == actual) is a boolean array; True is 1 when averaged."
+    },
+    {
+      "id": "2.3-reshape",
+      "title": "2.3 Shape + reshape",
+      "prompt": "Make `np.arange(12)`, reshape to (3, 4), print the shape and the array. Then transpose it and print again.",
+      "starter": "import numpy as np\n# TODO\n",
+      "solution": "import numpy as np\na = np.arange(12).reshape(3, 4)\nprint(a.shape)\nprint(a)\nprint(a.T)\n",
+      "hint": "reshape RETURNS a new view — assign it."
+    },
+    {
+      "id": "2.4-indexing",
+      "title": "2.4 2D indexing & slicing",
+      "prompt": "Print the last row, the last column, and the top-right 2×2 block of the matrix.",
+      "starter": "import numpy as np\ndata = np.array([\n    [10, 20, 30, 40],\n    [50, 60, 70, 80],\n    [90,100,110,120],\n])\n# TODO: last row, last col, top-right 2x2\n",
+      "solution": "import numpy as np\ndata = np.array([\n    [10, 20, 30, 40],\n    [50, 60, 70, 80],\n    [90,100,110,120],\n])\nprint(data[-1])\nprint(data[:, -1])\nprint(data[0:2, 2:4])\n",
+      "hint": "[rows, cols] — use : for 'all'."
+    },
+    {
+      "id": "2.5-mask-flip",
+      "title": "2.5 Mini label flip (boolean indexing)",
+      "prompt": "Given `y = [0,1,0,1,0,0,1,1,0,1]`: find indices of class 0, count each class, make a copy, flip ALL 0s to 1s. Print the result.",
+      "starter": "import numpy as np\ny = np.array([0,1,0,1,0,0,1,1,0,1])\n# TODO: indices, counts, flip\n",
+      "solution": "import numpy as np\ny = np.array([0,1,0,1,0,0,1,1,0,1])\nidx0 = np.where(y == 0)[0]\nprint(\"class0 idx:\", idx0)\nprint(\"counts:\", (y == 0).sum(), (y == 1).sum())\ny2 = y.copy()\ny2[idx0] = 1\nprint(\"flipped:\", y2)\n",
+      "hint": "np.where(mask)[0] gives indices. ALWAYS .copy() before mutating."
+    },
+    {
+      "id": "2.6-rng",
+      "title": "2.6 Modern RNG + random choice",
+      "prompt": "Using `np.random.default_rng(42)`, pick 5 unique indices from `np.arange(20)`. Print them.",
+      "starter": "import numpy as np\n# TODO: rng with seed 42, choose 5 from arange(20), replace=False\n",
+      "solution": "import numpy as np\nrng = np.random.default_rng(42)\npicked = rng.choice(np.arange(20), size=5, replace=False)\nprint(picked)\n",
+      "hint": "rng.choice(a, size=n, replace=False)"
+    },
+    {
+      "id": "2.7-label-flip-attack",
+      "title": "2.7 Full label-flipping attack",
+      "prompt": "Mimic a poisoning attack: from `y = [0,0,0,1,1,1,1,1,0,0]`, find all class-1 indices, pick 50% of them randomly (seed 99), flip to class 0. Print original and poisoned.",
+      "starter": "import numpy as np\ny = np.array([0,0,0,1,1,1,1,1,0,0])\n# TODO\n",
+      "solution": "import numpy as np\nrng = np.random.default_rng(99)\ny = np.array([0,0,0,1,1,1,1,1,0,0])\ntarget = np.where(y == 1)[0]\nflip = rng.choice(target, size=int(len(target) * 0.5), replace=False)\ny2 = y.copy()\ny2[flip] = 0\nprint(\"original:\", y)\nprint(\"poisoned:\", y2)\n",
+      "hint": "n_to_flip = int(len(target) * 0.5)"
+    },
+    {
+      "id": "2.8-broadcasting",
+      "title": "2.8 Broadcasting (feature scaling)",
+      "prompt": "Given `X` of shape (5, 3) (samples × features), compute the per-feature mean and use broadcasting to mean-center `X`. Print the centered array's column means (should be ~0).",
+      "starter": "import numpy as np\nrng = np.random.default_rng(0)\nX = rng.normal(loc=10, scale=2, size=(5, 3))\nprint(X)\n# TODO: subtract column means\n",
+      "solution": "import numpy as np\nrng = np.random.default_rng(0)\nX = rng.normal(loc=10, scale=2, size=(5, 3))\nmu = X.mean(axis=0)\nXc = X - mu          # broadcasting: (5,3) - (3,) -> (5,3)\nprint(Xc.mean(axis=0))\n",
+      "hint": "axis=0 means 'reduce over rows' -> one value per column."
+    }
+  ]
+}

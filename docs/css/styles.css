@@ -449,6 +449,50 @@ body {
 }
 .exercise-prompt .ex-hint summary { cursor: pointer; }
 
+.exercise-prompt .ex-explain {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-dim);
+  border-radius: 6px;
+  padding: 4px 12px 8px;
+  margin: 0 0 12px;
+}
+.exercise-prompt .ex-explain > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--accent);
+  padding: 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  list-style: none;
+}
+.exercise-prompt .ex-explain > summary::-webkit-details-marker { display: none; }
+.exercise-prompt .ex-explain > summary::before {
+  content: "▾ ";
+  display: inline-block;
+  transition: transform 0.15s;
+}
+.exercise-prompt .ex-explain:not([open]) > summary::before { content: "▸ "; }
+.exercise-prompt .ex-explain .lesson {
+  font-size: 14px;
+  margin-top: 2px;
+}
+.exercise-prompt .ex-explain .lesson p  { margin: 0.4em 0; }
+.exercise-prompt .ex-explain .lesson ul,
+.exercise-prompt .ex-explain .lesson ol { margin: 0.4em 0; padding-left: 22px; }
+.exercise-prompt .ex-explain .lesson li { margin: 0.15em 0; }
+.exercise-prompt .ex-explain .lesson code {
+  font-size: 13px;
+}
+.exercise-prompt .ex-explain .lesson pre {
+  margin: 8px 0;
+}
+.exercise-prompt .ex-explain .lesson pre code {
+  font-size: 12px;
+  padding: 10px;
+}
+
 /* ----- misc ----- */
 .empty {
   text-align: center;

@@ -6,6 +6,7 @@
     {
       "id": "1.1-variables",
       "title": "1.1 Variables and f-strings",
+      "explain": "**Variables** in Python don't need a type declaration — `x = 5` just creates a name pointing at the value. The same name can later point at a string, a list, anything.\n\n**f-strings** are formatted string literals. Prefix a string with `f` and put `{expression}` inside to substitute values.\n\n```python\nname = \"sklearn\"\nver  = 1.5\nprint(f\"Using {name} v{ver}\")        # → Using sklearn v1.5\nprint(f\"square of 7 = {7*7}\")        # any expression works\n```\n\nUse `{var!r}` to show the `repr()` (quoted strings), or `{val:.2f}` to format numbers.",
       "prompt": "Create a variable `model_name` set to `\"RandomForest\"` and `n_classes` set to `25`. Print both using a single f-string.",
       "starter": "# Python figures out types automatically\nname = \"malware_sample\"\ncount = 42\naccuracy = 0.95\nprint(f\"Name: {name}, Count: {count}, Accuracy: {accuracy}\")\n\n# TODO: model_name = ?\n#       n_classes  = ?\n#       print f-string with both\n",
       "solution": "model_name = \"RandomForest\"\nn_classes = 25\nprint(f\"model_name = {model_name}, n_classes = {n_classes}\")\n",
@@ -14,6 +15,7 @@
     {
       "id": "1.2-lists",
       "title": "1.2 Lists — index and slice",
+      "explain": "A **list** is an ordered, mutable sequence: `[a, b, c]`. Items are accessed by integer index starting at `0`.\n\n- `lst[0]` — first element\n- `lst[-1]` — last element (negative indexes count from the end)\n- `lst[a:b]` — **slice** from index `a` up to (but **not including**) `b`\n- `lst[a:b:step]` — every `step`-th element; `lst[::-1]` reverses\n\nSlicing always returns a *new* list. Out-of-range slices don't crash — they just return empty.\n\n```python\nxs = [10, 20, 30, 40, 50]\nxs[2]      # 30\nxs[-2]     # 40\nxs[1:4]    # [20, 30, 40]   indices 1,2,3 — end is EXCLUSIVE\nxs[:3]     # [10, 20, 30]   from start\n```",
       "prompt": "Create `scores = [0.85, 0.90, 0.78, 0.95, 0.88]`. Print the first, the last, and the middle three (indices 1–3 inclusive).",
       "starter": "attacks = [\"dos\", \"probe\", \"privilege\", \"access\"]\nprint(attacks[0])     # first\nprint(attacks[-1])    # last\nprint(attacks[1:3])   # slice\n\n# TODO\nscores = ...\n",
       "solution": "scores = [0.85, 0.90, 0.78, 0.95, 0.88]\nprint(scores[0], scores[-1], scores[1:4])\n",
@@ -22,6 +24,7 @@
     {
       "id": "1.3-loops",
       "title": "1.3 For loops with enumerate",
+      "explain": "A `for` loop iterates over any **iterable** (list, tuple, string, dict, generator…). The loop variable takes each value in turn.\n\n```python\nfor x in [10, 20, 30]:\n    print(x)         # 10, 20, 30\n```\n\n`enumerate(iterable)` wraps an iterable so each step yields a `(index, value)` tuple. Use it when you need *both* the position and the value.\n\n```python\nfor i, name in enumerate([\"a\", \"b\", \"c\"]):\n    print(i, name)\n# 0 a\n# 1 b\n# 2 c\n```\n\nOptional second arg: `enumerate(seq, start=1)` starts counting at 1.",
       "prompt": "Loop through `scores` and print `\"Score i: x\"` for each, where i is the index and x is the value.",
       "starter": "scores = [0.85, 0.90, 0.78, 0.95, 0.88]\n\n# TODO: use enumerate\n",
       "solution": "scores = [0.85, 0.90, 0.78, 0.95, 0.88]\nfor i, s in enumerate(scores):\n    print(f\"Score {i}: {s}\")\n",
@@ -30,6 +33,7 @@
     {
       "id": "1.4-conditionals",
       "title": "1.4 if / elif / else",
+      "explain": "`if` runs a block when a condition is true. Add `elif` (else-if) for more conditions, and `else` for the fallback. Python uses **indentation** (4 spaces) to mark blocks — no braces.\n\n```python\nx = 7\nif x < 0:\n    print(\"negative\")\nelif x == 0:\n    print(\"zero\")\nelse:\n    print(\"positive\")\n```\n\n**Comparison operators:** `==` (equal), `!=` (not equal), `<`, `<=`, `>`, `>=`. **`=` is assignment, `==` is comparison — confusing them is the #1 beginner bug.**\n\n**Boolean operators:** `and`, `or`, `not` (not `&&`/`||`).",
       "prompt": "Given a variable `label`, print `\"Blocked\"` if it's `\"spam\"`, `\"Allowed\"` if `\"normal\"`, otherwise `\"Unknown\"`. Test with several values.",
       "starter": "label = \"spam\"\n\n# TODO\n",
       "solution": "for label in (\"spam\", \"normal\", \"phish\"):\n    if label == \"spam\":  print(\"Blocked\")\n    elif label == \"normal\": print(\"Allowed\")\n    else:                  print(\"Unknown\")\n",
@@ -38,6 +42,7 @@
     {
       "id": "1.5-dicts",
       "title": "1.5 Dictionaries",
+      "explain": "A **dict** is a mapping of keys → values: `{key: value, key: value, ...}`. Keys must be hashable (strings, numbers, tuples).\n\n```python\nuser = {\"name\": \"alice\", \"role\": \"admin\"}\nuser[\"name\"]              # \"alice\"          — lookup\nuser[\"age\"] = 30          # add / update\n\"role\" in user            # True             — membership\nuser.get(\"missing\", \"?\")  # \"?\"  — safe lookup with default\n```\n\nTo iterate, use one of these:\n\n- `for k in d:` → keys only\n- `for v in d.values():` → values only\n- `for k, v in d.items():` → both, as `(key, value)` pairs\n\n`.items()` is what you almost always want when you need both.",
       "prompt": "Create `dataset_info = {\"name\": \"NSL-KDD\", \"samples\": 125973, \"features\": 41}`. Loop through it printing `key -> value` for each entry.",
       "starter": "model = {\"name\": \"LogReg\", \"accuracy\": 0.93}\nfor k, v in model.items():\n    print(f\"{k} = {v}\")\n\n# TODO\n",
       "solution": "dataset_info = {\"name\": \"NSL-KDD\", \"samples\": 125973, \"features\": 41}\nfor k, v in dataset_info.items():\n    print(f\"{k} -> {v}\")\n",
@@ -46,6 +51,7 @@
     {
       "id": "1.6-functions",
       "title": "1.6 Functions",
+      "explain": "`def` defines a function. The body is indented; `return` sends a value back to the caller (functions without an explicit return give `None`).\n\n```python\ndef greet(name, greeting=\"hi\"):     # greeting has a DEFAULT value\n    return f\"{greeting}, {name}!\"\n\ngreet(\"alice\")                       # 'hi, alice!'\ngreet(\"bob\", greeting=\"hello\")       # 'hello, bob!'  — keyword arg\n```\n\nFunctions are **first-class** — you can pass them as arguments, return them from other functions, store them in lists.\n\nA boolean expression like `x != \"normal\"` already evaluates to `True`/`False`, so `return x != \"normal\"` is cleaner than `if x != \"normal\": return True; else: return False`.",
       "prompt": "Write `is_malicious(label)` that returns `True` if label is not `\"normal\"`. Call it with both `\"dos\"` and `\"normal\"` and print the results.",
       "starter": "def compute_accuracy(correct, total):\n    return round(100 * correct / total, 2)\n\nprint(compute_accuracy(95, 100))\n\n# TODO\ndef is_malicious(label):\n    ...\n",
       "solution": "def is_malicious(label):\n    return label != \"normal\"\n\nprint(is_malicious(\"dos\"))\nprint(is_malicious(\"normal\"))\n",
@@ -54,6 +60,7 @@
     {
       "id": "1.7-comprehensions",
       "title": "1.7 List comprehensions",
+      "explain": "A **list comprehension** builds a new list in one expression — shorter and faster than a `for`-loop with `.append()`.\n\nThree shapes:\n\n```python\n[expr     for x in seq]                # transform every item\n[expr     for x in seq if condition]   # filter + transform\n[A if cond else B for x in seq]        # conditional expression PER ITEM\n```\n\nExamples:\n\n```python\n[n*2 for n in [1,2,3]]                       # [2, 4, 6]\n[n   for n in range(10) if n % 2 == 0]       # [0, 2, 4, 6, 8]\n[1 if x == \"spam\" else 0 for x in labels]    # encode strings to ints\n```\n\n**Position matters:** `if` on the right *filters* items; an `if/else` *expression* (before `for`) replaces values without dropping any.",
       "prompt": "Given `labels = [\"spam\", \"normal\", \"spam\", \"normal\", \"spam\", \"normal\"]`, use a comprehension to build `binary_labels` where spam=1, normal=0. Expected: `[1,0,1,0,1,0]`.",
       "starter": "nums = [1, 2, 3, 4, 5]\ndoubled = [n * 2 for n in nums]\nprint(doubled)\n\nlabels = [\"spam\", \"normal\", \"spam\", \"normal\", \"spam\", \"normal\"]\n# TODO\n",
       "solution": "labels = [\"spam\", \"normal\", \"spam\", \"normal\", \"spam\", \"normal\"]\nbinary = [1 if x == \"spam\" else 0 for x in labels]\nprint(binary)\n",
@@ -62,6 +69,7 @@
     {
       "id": "1.8-lambda-map",
       "title": "1.8 lambda + map",
+      "explain": "A **lambda** is a tiny anonymous (un-named) function written as a one-liner.\n\n```python\nadd = lambda a, b: a + b\nadd(2, 3)              # 5\n```\n\nIt's equivalent to `def add(a, b): return a + b`. Use lambdas when you need a quick function to pass as an argument — not as a substitute for `def` for anything non-trivial.\n\n**`map(func, iterable)`** applies `func` to each item and returns a **lazy iterator** (not a list!). Wrap it in `list(...)` to actually see the results.\n\n```python\nlist(map(str.upper, [\"a\", \"b\"]))           # ['A', 'B']\nlist(map(lambda x: x*x, [1, 2, 3]))        # [1, 4, 9]\n```\n\nMost Python folks prefer a list comprehension over `map` + lambda these days, but `map` shows up in legacy code and works fine.",
       "prompt": "Lowercase every string in `raw = [\"SPAM\", \"Normal\", \"SPAM\", \"HAM\"]` using `map()` and a lambda.",
       "starter": "raw = [\"SPAM\", \"Normal\", \"SPAM\", \"HAM\"]\n# TODO\n",
       "solution": "raw = [\"SPAM\", \"Normal\", \"SPAM\", \"HAM\"]\nlowered = list(map(lambda x: x.lower(), raw))\nprint(lowered)\n",
@@ -70,6 +78,7 @@
     {
       "id": "1.9-string-methods",
       "title": "1.9 String preprocessing chain",
+      "explain": "Strings are immutable — every method **returns a new string**, the original is untouched. Methods can be chained because each returns a string you can call another method on.\n\nKey methods:\n\n- `s.strip()` — remove leading/trailing whitespace (or pass chars: `s.strip(\".,\")`)\n- `s.lower()` / `s.upper()` — case conversion\n- `s.split()` — split on whitespace into a list (`s.split(\",\")` to split on a specific char)\n- `s.replace(old, new)` — substring replacement\n- `\" \".join(list_of_strings)` — opposite of split: glue items with a separator\n\nClassic NLP/text preprocessing chain:\n\n```python\n\"  Hello   WORLD!  \".strip().lower().split()\n# ['hello', 'world!']\n```\n\nNote: `.split()` with no argument splits on **any whitespace** and collapses runs of spaces. `.split(\" \")` only splits on single-space.",
       "prompt": "Given `msg = \"  Congratulations! You Won A FREE iPad!  \"`, chain methods to: strip, lowercase, split, join with `\" \"`. Print the result.",
       "starter": "text = \"  FREE Entry To Win A Prize!  \"\nprint(text.strip().lower())\n\nmsg = \"  Congratulations! You Won A FREE iPad!  \"\n# TODO\n",
       "solution": "msg = \"  Congratulations! You Won A FREE iPad!  \"\nprint(\" \".join(msg.strip().lower().split()))\n",
@@ -78,6 +87,7 @@
     {
       "id": "1.10-json-files",
       "title": "1.10 JSON files",
+      "explain": "**JSON** is the universal exchange format — basically a subset of Python literals: dicts, lists, strings, numbers, booleans, null. The standard-library `json` module converts between Python objects and JSON.\n\n| Direction | Function | Purpose |\n|-----------|----------|---------|\n| Python → JSON string | `json.dumps(obj)` | serialize to text |\n| JSON string → Python | `json.loads(s)` | parse text |\n| Python → file | `json.dump(obj, f)` | write directly to a file handle |\n| File → Python | `json.load(f)` | read directly from a file handle |\n\nMnemonic: **`s` = string**. `dumps`/`loads` work with strings; `dump`/`load` work with file objects.\n\n```python\nimport json\nblob = json.dumps({\"a\": 1, \"b\": [2, 3]})    # '{\"a\": 1, \"b\": [2, 3]}'\njson.loads(blob)                              # {'a': 1, 'b': [2, 3]}\n```\n\nUseful: `json.dumps(obj, indent=2)` pretty-prints.",
       "prompt": "Build `model_params = {\"coef\": [0.5, 0.3], \"intercept\": 0.1}`, dump it to JSON via `json.dumps`, then `json.loads` it back. Print both. (Pyodide's filesystem is virtual — we use string dumps for portability.)",
       "starter": "import json\n\nmodel_params = ...\n# TODO: dump to a string, load it back, print both\n",
       "solution": "import json\nmodel_params = {\"coef\": [0.5, 0.3], \"intercept\": 0.1}\nblob = json.dumps(model_params)\nloaded = json.loads(blob)\nprint(blob)\nprint(loaded)\n",

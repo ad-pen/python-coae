@@ -6,6 +6,7 @@
     {
       "id": "3.1-build-df",
       "title": "3.1 Build a DataFrame from a dict",
+      "explain": "**`import pandas as pd`** — the universal alias.\n\nA **DataFrame** is a 2D table with named columns (think spreadsheet or SQL table). The most direct constructor: `pd.DataFrame({col_name: list_of_values, ...})`. Each list must be the same length — it becomes one column.\n\n```python\ndf = pd.DataFrame({\n    \"host\":  [\"a\", \"b\", \"c\"],\n    \"bytes\": [100, 5000, 200],\n})\n#   host  bytes\n# 0    a    100\n# 1    b   5000\n# 2    c    200\n```\n\nThe leftmost numbers are the **index** (row labels) — auto-generated `RangeIndex` by default.\n\nUseful inspection:\n\n- `df.dtypes` — type per column (e.g. `int64`, `object` (= string))\n- `df.shape` — `(n_rows, n_cols)`\n- `df.head(n)` / `df.tail(n)` — first/last n rows\n- `df.info()` — full summary\n- `df.describe()` — stats for numeric columns",
       "prompt": "Make a DataFrame with columns `host`, `bytes_in`, `bytes_out`, `label` and 4 rows of made-up data. Print it and `.dtypes`.",
       "starter": "import pandas as pd\n# TODO\n",
       "solution": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"10.0.0.1\", \"10.0.0.2\", \"10.0.0.3\", \"10.0.0.4\"],\n    \"bytes_in\":  [1024, 8_000_000, 512, 250_000],\n    \"bytes_out\": [   0,    25_000,   0, 110_000],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\"],\n})\nprint(df)\nprint(df.dtypes)\n",
@@ -14,6 +15,7 @@
     {
       "id": "3.2-filter",
       "title": "3.2 Filtering with boolean masks",
+      "explain": "Same idea as NumPy boolean indexing — but on DataFrames.\n\nAccess a column two ways: `df[\"col_name\"]` or (shortcut, if the name is a valid identifier) `df.col_name`. Both return a **Series** (1D pandas vector with an index).\n\nA comparison on a column → boolean Series. Pass that back into `df[...]` to select rows.\n\n```python\ndf[df.bytes_out > 10_000]       # rows where bytes_out > 10k\ndf[df.label == \"normal\"]        # rows with label == normal\n```\n\nCombine with `&` (AND), `|` (OR), `~` (NOT) — **wrap each condition in parens** (operator precedence pitfall):\n\n```python\ndf[(df.bytes_in > 1000) & (df.label != \"normal\")]\n```\n\n**`.isin([list_of_values])`** is the OR-over-many shortcut — much cleaner than chaining `|`:\n\n```python\ndf[df.label.isin([\"exfil\", \"c2\"])]   # same as: label == \"exfil\" OR label == \"c2\"\n```",
       "prompt": "From the DataFrame above, select rows where `bytes_out > 10_000`. Then select rows where `label` is `exfil` OR `c2`.",
       "starter": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"10.0.0.1\", \"10.0.0.2\", \"10.0.0.3\", \"10.0.0.4\"],\n    \"bytes_in\":  [1024, 8_000_000, 512, 250_000],\n    \"bytes_out\": [   0,    25_000,   0, 110_000],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\"],\n})\n# TODO\n",
       "solution": "print(df[df.bytes_out > 10_000])\nprint(df[df.label.isin([\"exfil\", \"c2\"])])\n",
@@ -22,6 +24,7 @@
     {
       "id": "3.3-derived-col",
       "title": "3.3 Add a derived column",
+      "explain": "Assign to a new column name and pandas creates it:\n\n```python\ndf[\"new_col\"] = expression\n```\n\nThe RHS can be:\n\n- A constant: `df[\"version\"] = 1` — broadcasts to every row\n- An arithmetic combo of columns: `df[\"total\"] = df.bytes_in + df.bytes_out`\n- A comparison: `df[\"is_big\"] = df.total > 1_000_000` → boolean column\n- A vectorized string method: `df[\"host_upper\"] = df.host.str.upper()`\n\nUnder the hood, the same NumPy element-wise math applies — operations are vectorized, **no `for` loop needed**. Looping row-by-row in pandas is the #1 performance mistake.\n\nUseful: `df.assign(new_col=expression)` returns a *new* DataFrame instead of mutating in place — handy for chained pipelines.",
       "prompt": "Add column `total = bytes_in + bytes_out`, then add `is_malicious = label != \"normal\"`. Print the DataFrame.",
       "starter": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"10.0.0.1\", \"10.0.0.2\", \"10.0.0.3\", \"10.0.0.4\"],\n    \"bytes_in\":  [1024, 8_000_000, 512, 250_000],\n    \"bytes_out\": [   0,    25_000,   0, 110_000],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\"],\n})\n# TODO\n",
       "solution": "df[\"total\"] = df.bytes_in + df.bytes_out\ndf[\"is_malicious\"] = df.label != \"normal\"\nprint(df)\n",
@@ -30,6 +33,7 @@
     {
       "id": "3.4-groupby",
       "title": "3.4 groupby + agg",
+      "explain": "**`df.groupby(col)`** splits the DataFrame into sub-groups by the value(s) in `col` (SQL `GROUP BY`). It returns a `GroupBy` object — not useful by itself; you chain an aggregation onto it.\n\nQuick aggregations on a single column:\n\n```python\ndf.groupby(\"label\").bytes_in.mean()   # mean bytes_in per label\ndf.groupby(\"label\").size()             # row count per label\n```\n\n**`.agg(...)`** — apply multiple/custom aggregations. The **named-aggregation** syntax (clearest, recommended):\n\n```python\ndf.groupby(\"label\").agg(\n    mean_in = (\"bytes_in\",  \"mean\"),\n    max_out = (\"bytes_out\", \"max\"),\n    count   = (\"bytes_in\",  \"count\"),\n)\n```\n\nEach kwarg is `new_col_name = (source_column, aggregation)`. Aggregation can be a string (`\"mean\"`, `\"max\"`, `\"sum\"`, `\"min\"`, `\"std\"`, `\"count\"`, `\"nunique\"`) or any function.\n\nThe result is a DataFrame indexed by the group key — call `.reset_index()` to turn the group key back into a regular column.",
       "prompt": "Group by `label` and compute mean `bytes_in` and max `bytes_out` per group.",
       "starter": "import pandas as pd\ndf = pd.DataFrame({\n    \"host\":      [\"h1\", \"h2\", \"h3\", \"h4\", \"h5\"],\n    \"bytes_in\":  [1024, 8e6, 512, 250e3, 800],\n    \"bytes_out\": [0, 25e3, 0, 110e3, 0],\n    \"label\":     [\"normal\", \"exfil\", \"normal\", \"c2\", \"normal\"],\n})\n# TODO\n",
       "solution": "out = df.groupby(\"label\").agg(\n    mean_in=(\"bytes_in\", \"mean\"),\n    max_out=(\"bytes_out\", \"max\"),\n)\nprint(out)\n",
@@ -38,6 +42,7 @@
     {
       "id": "3.5-class-balance",
       "title": "3.5 Class balance check",
+      "explain": "**`series.value_counts()`** counts how often each unique value appears in a Series, sorted descending. It's the fastest way to see class distribution.\n\n```python\ndf.label.value_counts()\n# normal       80\n# malicious    20\n# Name: label, dtype: int64\n```\n\nAdd **`normalize=True`** to get fractions (proportions summing to 1) instead of raw counts:\n\n```python\ndf.label.value_counts(normalize=True)\n# normal       0.8\n# malicious    0.2\n```\n\n**Why this matters for ML attacks:** A classifier on 95% benign / 5% malicious data can get 95% accuracy by always predicting \"benign\" — useless. Always check `value_counts` first. The classic countermeasures are class-weighting, oversampling (SMOTE), or undersampling.\n\nOther useful methods: `series.unique()` (array of unique values), `series.nunique()` (count of unique values).",
       "prompt": "Before training any classifier, you check class balance. Print value counts (`label.value_counts()`) and the proportion of each class.",
       "starter": "import pandas as pd\ndf = pd.DataFrame({\"label\": [\"normal\"]*80 + [\"malicious\"]*20})\n# TODO\n",
       "solution": "print(df.label.value_counts())\nprint(df.label.value_counts(normalize=True))\n",

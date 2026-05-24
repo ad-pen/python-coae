@@ -6,6 +6,7 @@
     {
       "id": "2.1-array",
       "title": "2.1 Create arrays",
+      "explain": "**`import numpy as np`** — the universal alias. Always import it this way.\n\n**`np.array(list)`** builds an `ndarray` (N-dimensional array) from a Python list (or nested lists for 2D+).\n\nKey attributes (no parentheses — they're **attributes**, not method calls):\n\n- `.shape` — tuple of dimensions, e.g. `(5,)` for a 1D length-5 array, `(3, 4)` for 3 rows × 4 cols\n- `.dtype` — element type, e.g. `float64`, `int64`, `bool`\n- `.ndim` — number of dimensions (length of `.shape`)\n- `.size` — total number of elements\n\n```python\na = np.array([1.0, 2.0, 3.0])\na.shape    # (3,)        ← note the trailing comma — it's a 1-tuple\na.dtype    # dtype('float64')\ntype(a)    # <class 'numpy.ndarray'>\n```\n\nLists become arrays; arrays are *much* faster for numerical work because data is laid out contiguously in memory and operations run in C.",
       "prompt": "Create `scores = np.array([0.85, 0.90, 0.78, 0.95, 0.88])`. Print it, its `.shape`, and `type(scores)`.",
       "starter": "import numpy as np\n\na = np.array([1, 2, 3, 4, 5])\nprint(a, a.shape, type(a))\n\n# TODO\n",
       "solution": "import numpy as np\nscores = np.array([0.85, 0.90, 0.78, 0.95, 0.88])\nprint(scores, scores.shape, type(scores))\n",
@@ -14,6 +15,7 @@
     {
       "id": "2.2-elementwise",
       "title": "2.2 Element-wise math + accuracy",
+      "explain": "Numpy operators work **element-wise** on arrays of the same shape — no loops needed.\n\n```python\na = np.array([1, 2, 3])\nb = np.array([10, 20, 30])\na + b        # array([11, 22, 33])\na * 2        # array([2, 4, 6])     ← scalar broadcasts\na == b       # array([False, False, False])  ← boolean array\n```\n\n**`np.mean(arr)`** returns the average of all elements. On a **boolean array** (e.g. result of `==`), `True` is treated as `1` and `False` as `0`, so the mean is the fraction of `True` values.\n\nThat's why accuracy is one line: `np.mean(predictions == actual)`. The comparison gives a boolean array, the mean gives the fraction correct.\n\nUseful aggregations: `.mean()`, `.sum()`, `.min()`, `.max()`, `.std()` — all work as methods on the array OR as `np.mean(arr)` functions.",
       "prompt": "Given two arrays of predictions and ground-truth, compute the accuracy in one line using `np.mean(...)`.",
       "starter": "import numpy as np\n\npredictions = np.array([1, 0, 1, 1, 0, 1, 0, 0])\nactual      = np.array([1, 0, 0, 1, 0, 1, 1, 0])\n# TODO: one-line accuracy\n",
       "solution": "import numpy as np\npredictions = np.array([1, 0, 1, 1, 0, 1, 0, 0])\nactual      = np.array([1, 0, 0, 1, 0, 1, 1, 0])\nprint(np.mean(predictions == actual))\n",
@@ -22,6 +24,7 @@
     {
       "id": "2.3-reshape",
       "title": "2.3 Shape + reshape",
+      "explain": "**`np.arange(n)`** — like Python's `range`, but returns an array. `np.arange(12)` → `[0, 1, 2, ..., 11]`.\n\n**`.reshape(rows, cols)`** returns a *new view* of the same data in a different shape. The total number of elements must match. Common patterns:\n\n```python\nnp.arange(12).reshape(3, 4)   # 3 rows, 4 cols\nnp.arange(12).reshape(-1, 4)  # -1 = \"figure this dim out\"  → (3, 4)\nnp.arange(12).reshape(2, 2, 3) # 3D\n```\n\nReshape doesn't modify in-place — you must assign the result.\n\n**`.T`** is the **transpose** attribute — swaps rows and cols (for 2D). `(3, 4).T` → `(4, 3)`. For higher dims, use `np.transpose(arr, axes=(...))`.\n\n```python\na = np.arange(6).reshape(2, 3)\n# [[0 1 2]\n#  [3 4 5]]\na.T\n# [[0 3]\n#  [1 4]\n#  [2 5]]\n```",
       "prompt": "Make `np.arange(12)`, reshape to (3, 4), print the shape and the array. Then transpose it and print again.",
       "starter": "import numpy as np\n# TODO\n",
       "solution": "import numpy as np\na = np.arange(12).reshape(3, 4)\nprint(a.shape)\nprint(a)\nprint(a.T)\n",
@@ -30,6 +33,7 @@
     {
       "id": "2.4-indexing",
       "title": "2.4 2D indexing & slicing",
+      "explain": "For 2D arrays, indexing takes `[rows, cols]` separated by a comma — much cleaner than `lst[row][col]` chains.\n\nUse `:` for \"everything along this axis\":\n\n```python\na = np.array([[10, 20, 30],\n              [40, 50, 60],\n              [70, 80, 90]])\n\na[0, 1]      # 20            single element (row 0, col 1)\na[0]         # [10 20 30]    whole row 0  (same as a[0, :])\na[:, 1]      # [20 50 80]    whole column 1\na[-1]        # [70 80 90]    last row\na[:, -1]     # [30 60 90]    last column\na[0:2, 1:3]  # [[20 30],     2×2 block: rows 0-1, cols 1-2\n             #  [50 60]]    (end index exclusive, same as 1D)\n```\n\nNegative indexes and slices both work along each axis independently. This is how every ML/image-processing crop works.",
       "prompt": "Print the last row, the last column, and the top-right 2×2 block of the matrix.",
       "starter": "import numpy as np\ndata = np.array([\n    [10, 20, 30, 40],\n    [50, 60, 70, 80],\n    [90,100,110,120],\n])\n# TODO: last row, last col, top-right 2x2\n",
       "solution": "import numpy as np\ndata = np.array([\n    [10, 20, 30, 40],\n    [50, 60, 70, 80],\n    [90,100,110,120],\n])\nprint(data[-1])\nprint(data[:, -1])\nprint(data[0:2, 2:4])\n",
@@ -38,6 +42,7 @@
     {
       "id": "2.5-mask-flip",
       "title": "2.5 Mini label flip (boolean indexing)",
+      "explain": "A **boolean mask** is an array of `True`/`False` the same shape as your data. Index with it to select matching elements.\n\n```python\ny = np.array([0, 1, 0, 1, 0])\nmask = (y == 0)              # array([True, False, True, False, True])\ny[mask]                       # array([0, 0, 0])   — selected elements\nmask.sum()                    # 3                  — True counts as 1\n```\n\n**`np.where(condition)`** returns the **indices** where the condition is true, as a tuple of arrays (one per dimension). For a 1D array you usually want `np.where(...)[0]` to get just the index array.\n\n```python\nnp.where(y == 0)              # (array([0, 2, 4]),)   ← 1-element tuple\nnp.where(y == 0)[0]           # array([0, 2, 4])\n```\n\n**`.copy()`** creates an independent copy. **Critical:** plain `b = a` makes `b` reference the same array — mutating `b` will change `a`. Always `.copy()` before mutating if you need the original later.\n\nAssigning to a mask/index slice modifies in place:\n\n```python\ny2 = y.copy()\ny2[mask] = 9       # everywhere y was 0 → set to 9\n```",
       "prompt": "Given `y = [0,1,0,1,0,0,1,1,0,1]`: find indices of class 0, count each class, make a copy, flip ALL 0s to 1s. Print the result.",
       "starter": "import numpy as np\ny = np.array([0,1,0,1,0,0,1,1,0,1])\n# TODO: indices, counts, flip\n",
       "solution": "import numpy as np\ny = np.array([0,1,0,1,0,0,1,1,0,1])\nidx0 = np.where(y == 0)[0]\nprint(\"class0 idx:\", idx0)\nprint(\"counts:\", (y == 0).sum(), (y == 1).sum())\ny2 = y.copy()\ny2[idx0] = 1\nprint(\"flipped:\", y2)\n",
@@ -46,6 +51,7 @@
     {
       "id": "2.6-rng",
       "title": "2.6 Modern RNG + random choice",
+      "explain": "Use the **modern RNG API** (NumPy ≥ 1.17): `rng = np.random.default_rng(seed)`. The seed makes results reproducible — same seed = same numbers every run.\n\n*(The older `np.random.choice` / `np.random.seed` globals still work but are discouraged in new code.)*\n\nWith `rng`, common methods:\n\n- `rng.random(size=...)` — uniform in [0, 1)\n- `rng.normal(loc=0, scale=1, size=...)` — Gaussian\n- `rng.integers(low, high, size=...)` — random ints\n- `rng.choice(a, size=n, replace=False)` — pick `n` items from array `a`\n\n**`rng.choice(a, size=n, replace=False)`** picks `n` distinct items from `a` (no repeats). `replace=True` (default) allows duplicates. This is exactly what poisoning / sampling attacks do: pick which indices to corrupt.\n\n```python\nrng = np.random.default_rng(42)\nrng.choice(np.arange(10), size=3, replace=False)\n# array([0, 7, 6])   ← reproducible because seeded\n```",
       "prompt": "Using `np.random.default_rng(42)`, pick 5 unique indices from `np.arange(20)`. Print them.",
       "starter": "import numpy as np\n# TODO: rng with seed 42, choose 5 from arange(20), replace=False\n",
       "solution": "import numpy as np\nrng = np.random.default_rng(42)\npicked = rng.choice(np.arange(20), size=5, replace=False)\nprint(picked)\n",
@@ -54,6 +60,7 @@
     {
       "id": "2.7-label-flip-attack",
       "title": "2.7 Full label-flipping attack",
+      "explain": "Putting it all together — this is the **label-flipping data-poisoning** pattern:\n\n1. Identify target indices with `np.where(y == target_class)[0]`.\n2. Pick a random subset of them with `rng.choice(target, size=n_to_flip, replace=False)`.\n3. Copy the array (`.copy()` — don't mutate the original).\n4. Assign the new label: `y_poisoned[flip_indices] = new_class`.\n\nThe size formula is the pattern you'll repeat: `int(len(target) * fraction)` — converts a percentage into an integer count. `int(...)` truncates toward zero.\n\n```python\ntarget = np.where(y == 1)[0]              # indices of class-1 samples\nn_flip = int(len(target) * 0.5)           # 50% of them\nflip = rng.choice(target, size=n_flip, replace=False)\ny2 = y.copy()\ny2[flip] = 0                              # flip class 1 → class 0\n```\n\nIn real attacks you'd also vary which class to target and what fraction maximizes damage while staying undetected.",
       "prompt": "Mimic a poisoning attack: from `y = [0,0,0,1,1,1,1,1,0,0]`, find all class-1 indices, pick 50% of them randomly (seed 99), flip to class 0. Print original and poisoned.",
       "starter": "import numpy as np\ny = np.array([0,0,0,1,1,1,1,1,0,0])\n# TODO\n",
       "solution": "import numpy as np\nrng = np.random.default_rng(99)\ny = np.array([0,0,0,1,1,1,1,1,0,0])\ntarget = np.where(y == 1)[0]\nflip = rng.choice(target, size=int(len(target) * 0.5), replace=False)\ny2 = y.copy()\ny2[flip] = 0\nprint(\"original:\", y)\nprint(\"poisoned:\", y2)\n",
@@ -62,6 +69,7 @@
     {
       "id": "2.8-broadcasting",
       "title": "2.8 Broadcasting (feature scaling)",
+      "explain": "**Broadcasting** is NumPy's rule for combining arrays of different shapes — it stretches the smaller one along the missing dimensions, no actual copy made.\n\nRule: align shapes from the **right**. Dimensions match if equal OR if one is 1 OR if one is missing.\n\n```python\nA = np.ones((5, 3))   # shape (5, 3)\nv = np.array([1,2,3]) # shape    (3,)  → treated as (1, 3)\nA + v                  # (5, 3) — v added to every row\n```\n\n**`X.mean(axis=0)`** — the **`axis` argument** is the dimension to *collapse*. For a `(samples, features)` matrix:\n\n- `axis=0` → reduce *across rows* → one value **per column** (per feature)\n- `axis=1` → reduce *across cols* → one value **per row** (per sample)\n\nSo `X.mean(axis=0)` gives the per-feature mean (shape `(features,)`). Subtracting it from `X` mean-centers every column via broadcasting.\n\n```python\nmu = X.mean(axis=0)         # shape (features,)\nX_centered = X - mu          # (samples, features) - (features,) → (samples, features)\nX_centered.mean(axis=0)      # ≈ 0 for each column\n```\n\nThis is the core of `StandardScaler` and every normalization layer.",
       "prompt": "Given `X` of shape (5, 3) (samples × features), compute the per-feature mean and use broadcasting to mean-center `X`. Print the centered array's column means (should be ~0).",
       "starter": "import numpy as np\nrng = np.random.default_rng(0)\nX = rng.normal(loc=10, scale=2, size=(5, 3))\nprint(X)\n# TODO: subtract column means\n",
       "solution": "import numpy as np\nrng = np.random.default_rng(0)\nX = rng.normal(loc=10, scale=2, size=(5, 3))\nmu = X.mean(axis=0)\nXc = X - mu          # broadcasting: (5,3) - (3,) -> (5,3)\nprint(Xc.mean(axis=0))\n",

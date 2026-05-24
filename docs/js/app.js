@@ -285,6 +285,7 @@ const App = (() => {
       card.className = 'exercise-prompt';
       card.innerHTML = `
         <p class="ex-title">${escapeHtml(ex.title || '')}</p>
+        ${ex.explain ? `<details class="ex-explain" open><summary>What's used here</summary><div class="lesson">${renderMarkdown(ex.explain)}</div></details>` : ''}
         <div class="ex-prompt lesson">${renderMarkdown(ex.prompt || '')}</div>
       `;
       app.appendChild(card);

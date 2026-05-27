@@ -5,6 +5,7 @@ const Practice = (() => {
     { slug: 'numpy',      title: 'Level 2 — NumPy for ML',          desc: 'Arrays, shape, indexing, masks, random — building blocks.' },
     { slug: 'pandas',     title: 'Level 3 — pandas',                desc: 'DataFrames, filtering, groupby. Used for datasets & feature work.' },
     { slug: 'sklearn',    title: 'Level 4 — scikit-learn',          desc: 'Train/test split, fit/predict, metrics, pipelines.' },
+    { slug: 'checkpoint1',title: 'Checkpoint A — Quiz: Levels 1–4', desc: 'Multiple-choice. Tests basics, numpy, pandas, sklearn.' },
     { slug: 'pytorch',    title: 'Level 5 — PyTorch',               desc: 'Tensors, models, training loop, autograd.' },
     { slug: 'attacks',    title: 'Level 6 — Attack scripts',        desc: 'Label flipping, evasion, prompt injection in code.' },
   ];

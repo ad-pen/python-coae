@@ -4,7 +4,7 @@
 //   - Cross-origin (CDN — pyodide, marked, hljs): stale-while-revalidate.
 // Bump CACHE_VERSION when shipping major changes to force a refresh.
 
-const CACHE_VERSION = 'coae-v2';
+const CACHE_VERSION = 'coae-v3';
 const ORIGIN = self.location.origin;
 
 const PRECACHE = [

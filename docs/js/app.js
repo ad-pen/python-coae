@@ -245,6 +245,91 @@ const App = (() => {
     return el;
   }
 
+  function renderQuiz(topic, questions) {
+    const scoreEl = document.createElement('div');
+    scoreEl.className = 'quiz-score';
+    app.appendChild(scoreEl);
+
+    const updateScore = () => {
+      let answered = 0, correct = 0;
+      for (const q of questions) {
+        const pick = Progress.getQuizPick(topic, q.id);
+        if (pick === null) continue;
+        answered++;
+        if (pick === q.correct) correct++;
+      }
+      scoreEl.innerHTML = `<strong>${correct} / ${questions.length}</strong> correct · ${answered} / ${questions.length} answered`;
+      scoreEl.classList.toggle('done', answered === questions.length);
+    };
+
+    questions.forEach((q, qIdx) => {
+      const card = document.createElement('div');
+      card.className = 'quiz-card';
+
+      const qBody = document.createElement('div');
+      qBody.className = 'quiz-q lesson';
+      qBody.innerHTML = `<div class="quiz-num">${qIdx + 1} / ${questions.length}</div>` + renderMarkdown(q.question);
+      card.appendChild(qBody);
+
+      const opts = document.createElement('div');
+      opts.className = 'quiz-options';
+      card.appendChild(opts);
+
+      const explainEl = document.createElement('div');
+      explainEl.className = 'quiz-explain lesson';
+      explainEl.hidden = true;
+      card.appendChild(explainEl);
+
+      const paint = () => {
+        const pick = Progress.getQuizPick(topic, q.id);
+        opts.innerHTML = '';
+        q.options.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'quiz-opt';
+          btn.innerHTML = renderMarkdown(opt);
+          if (pick !== null) {
+            btn.disabled = true;
+            if (i === q.correct) btn.classList.add('correct');
+            if (i === pick && pick !== q.correct) btn.classList.add('wrong');
+            if (i === pick) btn.classList.add('picked');
+          }
+          btn.addEventListener('click', () => {
+            if (Progress.getQuizPick(topic, q.id) !== null) return;
+            Progress.setQuizPick(topic, q.id, i);
+            paint();
+            updateScore();
+          });
+          opts.appendChild(btn);
+        });
+        if (pick !== null && q.explain) {
+          explainEl.innerHTML = `<strong>${pick === q.correct ? '✓ Correct.' : '✗ Not quite.'}</strong> ${renderMarkdown(q.explain)}`;
+          explainEl.hidden = false;
+        } else {
+          explainEl.hidden = true;
+        }
+      };
+      paint();
+      app.appendChild(card);
+    });
+
+    const resetWrap = document.createElement('div');
+    resetWrap.style.cssText = 'margin:20px 0;text-align:center';
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'secondary';
+    resetBtn.style.cssText = 'background:transparent;color:var(--text-dim);border:1px solid var(--border);padding:8px 14px;border-radius:6px;cursor:pointer';
+    resetBtn.textContent = 'Reset this quiz';
+    resetBtn.addEventListener('click', () => {
+      if (!confirm('Clear your answers for this quiz?')) return;
+      for (const q of questions) Progress.setQuizPick(topic, q.id, null);
+      route();
+    });
+    resetWrap.appendChild(resetBtn);
+    app.appendChild(resetWrap);
+
+    updateScore();
+  }
+
   async function renderPracticeMenu() {
     setHeader('Practice', false);
     setActiveNav('practice');
@@ -279,6 +364,12 @@ const App = (() => {
     }
     app.innerHTML = '';
     app.appendChild(intro);
+
+    if (data.quiz && data.quiz.length) {
+      renderQuiz(topic, data.quiz);
+      window.scrollTo(0, 0);
+      return;
+    }
 
     for (const ex of (data.exercises || [])) {
       const card = document.createElement('div');

@@ -23,6 +23,7 @@ const Progress = (() => {
     state.answers      ||= {};
     state.exercises    ||= {};
     state.questionsGot ||= {};
+    state.quiz         ||= {};
     return state;
   }
   function save() {
@@ -69,6 +70,19 @@ const Progress = (() => {
       load();
       const k = `${topic}/${exId}`;
       state.exercises[k] = { ...(state.exercises[k] || {}), ...patch };
+      save();
+    },
+
+    getQuizPick(topic, qid) {
+      load();
+      const v = state.quiz[`${topic}/${qid}`];
+      return (typeof v === 'number') ? v : null;
+    },
+    setQuizPick(topic, qid, idx) {
+      load();
+      const k = `${topic}/${qid}`;
+      if (idx === null || idx === undefined) delete state.quiz[k];
+      else state.quiz[k] = idx;
       save();
     },
 

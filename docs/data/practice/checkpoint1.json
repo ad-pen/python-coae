@@ -1,0 +1,171 @@
+{
+  "title": "Checkpoint A — Quiz: Levels 1–4",
+  "slug": "checkpoint1",
+  "intro": "## Quick gut-check\n\n17 multiple-choice questions covering Python basics, NumPy, pandas, and scikit-learn. Tap an answer to see if it's right and read a one-line explanation. Your picks are saved locally — score updates at the top.\n\nMissed something? Jump back to the relevant level (link at the end of the explanation).",
+  "quiz": [
+    {
+      "id": "q1",
+      "question": "What does `xs[1:4]` give when `xs = [10, 20, 30, 40, 50]`?",
+      "options": ["[10, 20, 30]", "[20, 30, 40]", "[20, 30, 40, 50]", "[10, 20, 30, 40]"],
+      "correct": 1,
+      "explain": "Slicing is **end-exclusive**: `[1:4]` gives indices 1, 2, 3 → `[20, 30, 40]`. The element at index 4 is not included. (Level 1.2)"
+    },
+    {
+      "id": "q2",
+      "question": "Inside `if ___ :` for comparing `x` to `5`, which is correct Python?",
+      "options": ["`if x = 5:`", "`if x == 5:`", "`if x === 5:`", "`if x equals 5:`"],
+      "correct": 1,
+      "explain": "`=` is **assignment**, `==` is **comparison**. Python has no `===` (that's JavaScript). Mixing up `=` and `==` is the #1 beginner bug. (Level 1.4)"
+    },
+    {
+      "id": "q3",
+      "question": "Given `for i, v in enumerate([\"a\", \"b\", \"c\"]):`, what is `i` on the second iteration?",
+      "options": ["0", "1", "2", "\"b\""],
+      "correct": 1,
+      "explain": "`enumerate` yields `(index, value)` pairs starting at 0. Second iteration → `(1, \"b\")`, so `i = 1`. (Level 1.3)"
+    },
+    {
+      "id": "q4",
+      "question": "What does this print?\n\n```python\nlabels = [\"spam\", \"ham\", \"spam\"]\nbinary = [1 if x == \"spam\" else 0 for x in labels]\nprint(binary)\n```",
+      "options": ["`[1, 0, 1]`", "`[True, False, True]`", "`[1, 1, 0]`", "TypeError"],
+      "correct": 0,
+      "explain": "The conditional expression `1 if x == \"spam\" else 0` evaluates per-element. \"spam\"→1, \"ham\"→0, \"spam\"→1. (Level 1.7)"
+    },
+    {
+      "id": "q5",
+      "question": "Which call parses a JSON **string** back into a Python object?",
+      "options": ["`json.dump(s)`", "`json.dumps(s)`", "`json.load(s)`", "`json.loads(s)`"],
+      "correct": 3,
+      "explain": "Mnemonic: `s` = **string**. `loads`/`dumps` work on strings; `load`/`dump` (no s) work on file handles. `dumps` *creates* a JSON string from a Python object; `loads` parses one. (Level 1.10)"
+    },
+    {
+      "id": "q6",
+      "question": "What is `a.shape` after `a = np.arange(12).reshape(3, 4)`?",
+      "options": ["`(12,)`", "`(3, 4)`", "`(4, 3)`", "`12`"],
+      "correct": 1,
+      "explain": "`reshape(3, 4)` returns a view with 3 rows and 4 columns, so `.shape == (3, 4)`. Total elements (12) must match `3 * 4`. (Level 2.3)"
+    },
+    {
+      "id": "q7",
+      "question": "Given 0/1 prediction and label arrays, what does `(predictions == actual).mean()` compute?",
+      "options": [
+        "The total number of matches",
+        "The fraction of matching elements (accuracy)",
+        "Always 0 or 1",
+        "Raises an error — can't average booleans"
+      ],
+      "correct": 1,
+      "explain": "`==` returns a boolean array. NumPy treats `True` as 1 and `False` as 0, so `.mean()` gives the fraction `True` — exactly accuracy. (Level 2.2)"
+    },
+    {
+      "id": "q8",
+      "question": "On a 2D array `data`, what does `data[:, -1]` select?",
+      "options": ["The last row", "The last column", "The diagonal", "The first column"],
+      "correct": 1,
+      "explain": "`[rows, cols]`: `:` means all rows, `-1` means the last column index. So this returns every row's last value as a 1D array. (Level 2.4)"
+    },
+    {
+      "id": "q9",
+      "question": "Why call `.copy()` before mutating a NumPy array you got from a slice or `np.where`?",
+      "options": [
+        "It's faster than mutating in place",
+        "Slices are views — mutating them changes the original array too",
+        "NumPy requires it for any assignment",
+        "To free up memory"
+      ],
+      "correct": 1,
+      "explain": "Slices and many indexing operations return **views** that share memory with the original. Without `.copy()`, modifying the view silently corrupts the original. Every poisoning / perturbation script must `.copy()` first. (Level 2.5)"
+    },
+    {
+      "id": "q10",
+      "question": "If `X.shape == (100, 5)`, what shape does `X.mean(axis=0)` have?",
+      "options": ["`(100,)`", "`(5,)`", "`(100, 5)`", "`()` (a scalar)"],
+      "correct": 1,
+      "explain": "`axis=0` **collapses rows** (the 0-th dimension) → one mean per column → shape `(5,)`. `axis=1` would collapse columns and give `(100,)`. (Level 2.8)"
+    },
+    {
+      "id": "q11",
+      "question": "Cleanest way to select rows where `df.label` is `\"exfil\"` OR `\"c2\"`:",
+      "options": [
+        "`df[df.label == \"exfil\" or df.label == \"c2\"]`",
+        "`df[df.label.isin([\"exfil\", \"c2\"])]`",
+        "`df.where(df.label == [\"exfil\", \"c2\"])`",
+        "`df[df.label in (\"exfil\", \"c2\")]`"
+      ],
+      "correct": 1,
+      "explain": "`.isin([...])` is the standard OR-over-many. Bare `or`/`in` don't work on Series — they raise `ValueError: truth value of a Series is ambiguous`. (Level 3.2)"
+    },
+    {
+      "id": "q12",
+      "question": "What does `df.label.value_counts(normalize=True)` return?",
+      "options": [
+        "Raw counts of each unique value",
+        "Fractions (proportions) summing to 1",
+        "Z-scores of the values",
+        "The single most common value (mode)"
+      ],
+      "correct": 1,
+      "explain": "`normalize=True` divides each count by the total, giving proportions. This is how you check class balance before training. (Level 3.5)"
+    },
+    {
+      "id": "q13",
+      "question": "Vectorized way to make a new column `total = bytes_in + bytes_out` in pandas:",
+      "options": [
+        "`for i in range(len(df)): df.loc[i, \"total\"] = df.loc[i, \"bytes_in\"] + df.loc[i, \"bytes_out\"]`",
+        "`df[\"total\"] = df.bytes_in + df.bytes_out`",
+        "`df = df.append(total=df.bytes_in + df.bytes_out)`",
+        "`df.add_col(\"total\", df.bytes_in + df.bytes_out)`"
+      ],
+      "correct": 1,
+      "explain": "Column arithmetic is element-wise — no loop, no `.apply`. The looping version works but is 100–1000× slower on real datasets. (Level 3.3)"
+    },
+    {
+      "id": "q14",
+      "question": "What does `train_test_split(X, y, test_size=0.2)` return?",
+      "options": [
+        "`(X_train, X_test)`",
+        "`(X_train, y_train, X_test, y_test)`",
+        "`(X_train, X_test, y_train, y_test)`",
+        "`(train_df, test_df)`"
+      ],
+      "correct": 2,
+      "explain": "Fixed order: **X_train, X_test, y_train, y_test**. Both X's then both y's. Getting this wrong silently feeds your test data into training. Always pin `random_state=` too. (Level 4.1)"
+    },
+    {
+      "id": "q15",
+      "question": "Why must `StandardScaler` be fit only on the **training set**, not the full dataset?",
+      "options": [
+        "Test set is usually too small to fit on",
+        "It would leak test-set statistics into the model — optimistic, fake-good scores",
+        "scikit-learn raises an error otherwise",
+        "It's faster"
+      ],
+      "correct": 1,
+      "explain": "Fitting on all data leaks test statistics (mean/std) into preprocessing. Use a `Pipeline` to chain scaler + model — it handles this automatically. (Level 4.3)"
+    },
+    {
+      "id": "q16",
+      "question": "Imbalanced security data: 95% benign. A lazy model always predicts \"benign\" and gets 95% accuracy. Which metric exposes that it's useless?",
+      "options": [
+        "Accuracy (still drops to 0)",
+        "Recall on the malicious class",
+        "Mean squared error",
+        "R-squared"
+      ],
+      "correct": 1,
+      "explain": "Recall = TP / (TP + FN). If the model never predicts \"malicious\", TP = 0 → recall = 0. Accuracy hides this; that's why security ML reports precision/recall/F1, not accuracy alone. (Level 4.4)"
+    },
+    {
+      "id": "q17",
+      "question": "In `Pipeline([(\"scaler\", StandardScaler()), (\"clf\", LogisticRegression())])`, what does `pipe.fit(X_tr, y_tr)` actually do?",
+      "options": [
+        "Fits scaler and clf independently on the raw X_tr",
+        "Fits scaler on X_tr, transforms X_tr, then fits clf on the scaled X_tr",
+        "Fits clf only; the scaler is applied at predict time",
+        "Fits scaler, then fits clf on raw (un-scaled) X_tr"
+      ],
+      "correct": 1,
+      "explain": "A Pipeline runs each transformer's `fit_transform` in order, then `fit` on the final estimator with the transformed data. At predict time, the same fitted transformers apply to new data. (Level 4.3)"
+    }
+  ]
+}
